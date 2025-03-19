@@ -31,18 +31,22 @@ router.get("/profile", authMiddleware, async (req, res) => {
                     ytlink: contest.ytlink || null,
                 },
                 reminderTime: reminder.reminderTime,
+                type:reminder.type,
             };
         }).filter(Boolean);
 
         res.json({
             name: user.name,
             email: user.email,
+            contactNo: user.contactNo,  // Added contact number here
             bookmarkedContests: user.bookmarkedContests,
             reminders: formattedReminders,
         });
     } catch (error) {
+        console.error("Error fetching user profile:", error);
         res.status(500).json({ message: "Error fetching user profile", error });
     }
 });
+
 
 module.exports = router;

@@ -3,10 +3,9 @@ import axios from "axios";
 import { Container, Card, CardContent, Typography, CircularProgress, Alert, List, ListItem, ListItemText, Link, Grid, Avatar } from "@mui/material";
 
 const platformLogos = {
-    "Codeforces": "https://example.com/codeforces-logo.png",
-    "LeetCode": "https://example.com/leetcode-logo.png",
-    "CodeChef": "https://example.com/codechef-logo.png",
-    "AtCoder": "https://example.com/atcoder-logo.png",
+    "codeforces.com": "https://img.icons8.com/external-tal-revivo-filled-tal-revivo/24/external-codeforces-programming-competitions-and-contests-programming-community-logo-filled-tal-revivo.png",
+    "codechef.com": "https://img.icons8.com/fluency/48/codechef.png",
+    "leetcode.com": "https://img.icons8.com/external-tal-revivo-color-tal-revivo/24/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-color-tal-revivo.png"
 };
 
 const Profile = () => {
@@ -44,57 +43,132 @@ const Profile = () => {
     if (error) return <Container sx={{ mt: 4 }}><Alert severity="error">{error}</Alert></Container>;
 
     return (
-        <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Card elevation={3} sx={{ p: 3, mb: 3 }}>
-                <CardContent>
-                    <Typography variant="h4" gutterBottom>Profile</Typography>
-                    <Typography variant="h6"><strong>Name:</strong> {user.name}</Typography>
-                    <Typography variant="h6"><strong>Email:</strong> {user.email}</Typography>
-                </CardContent>
-            </Card>
+        <Container maxWidth="md" sx={{ mt: 6, mb: 6 }}>
+  <Card elevation={4} sx={{ p: 4, mb: 4, borderRadius: 3 }}>
+    <CardContent>
+      <Typography variant="h4" gutterBottom sx={{ fontWeight: 600, color: "primary.main" }}>
+        Profile
+      </Typography>
+      <Typography variant="h6" sx={{ mb: 1 }}>
+        <strong>Name:</strong> {user.name}
+      </Typography>
+      <Typography variant="h6" sx={{ mb: 1 }}>
+        <strong>Email:</strong> {user.email}
+      </Typography>
+      <Typography variant="h6">
+        <strong>Contact No:</strong> {user.contactNo}
+      </Typography>
+    </CardContent>
+  </Card>
 
-            <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
-                    <Card elevation={3} sx={{ p: 3 }}>
-                        <CardContent>
-                            <Typography variant="h5" gutterBottom>Bookmarked Contests</Typography>
-                            {user.bookmarkedContests.length > 0 ? (
-                                <List>
-                                    {user.bookmarkedContests.map(contest => (
-                                        <ListItem key={contest._id}>
-                                            <Avatar src={platformLogos[contest.resource] || "https://example.com/default-logo.png"} sx={{ mr: 2 }} />
-                                            <ListItemText primary={
-                                                <Link href={contest.href} target="_blank" rel="noopener noreferrer">
-                                                    {contest.name} ({contest.resource})
-                                                </Link>
-                                            } />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : <Typography>No bookmarks found.</Typography>}
-                        </CardContent>
-                    </Card>
-                </Grid>
+  <Grid container spacing={4}>
+    <Grid item xs={12} md={6}>
+      <Card elevation={4} sx={{ p: 3, borderRadius: 3, height: "100%" }}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ fontWeight: 600, textAlign: "center", color: "primary.main" }}
+          >
+            Bookmarked Contests ⭐
+          </Typography>
+          {user.bookmarkedContests.length > 0 ? (
+            <List
+              sx={{
+                maxHeight: "320px",
+                overflowY: "auto",
+                scrollbarWidth: "thin",
+                "&::-webkit-scrollbar": {
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#ccc",
+                  borderRadius: "4px",
+                },
+              }}
+            >
+              {user.bookmarkedContests.map((contest) => (
+                <ListItem key={contest._id} disableGutters>
+                  <Avatar
+                    src={platformLogos[contest.resource] || "https://example.com/default-logo.png"}
+                    sx={{ mr: 2 }}
+                  />
+                  <ListItemText
+                    primary={
+                      <Link
+                        href={contest.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ textDecoration: "none", color: "#1976d2", fontWeight: 500 }}
+                      >
+                        {contest.name} ({contest.resource})
+                      </Link>
+                    }
+                  />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
+              No bookmarks found.
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    </Grid>
 
-                <Grid item xs={12} md={6}>
-                    <Card elevation={3} sx={{ p: 3 }}>
-                        <CardContent>
-                            <Typography variant="h5" gutterBottom>Reminders</Typography>
-                            {user.reminders.length > 0 ? (
-                                <List>
-                                    {user.reminders.map(reminder => (
-                                        <ListItem key={reminder._id}>
-                                            <Avatar src={platformLogos[reminder.contest.resource] || "https://example.com/default-logo.png"} sx={{ mr: 2 }} />
-                                            <ListItemText primary={`${reminder.contest.name} - Reminder set for ${new Date(reminder.reminderTime).toLocaleString()}`} />
-                                        </ListItem>
-                                    ))}
-                                </List>
-                            ) : <Typography>No reminders set.</Typography>}
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
-        </Container>
+    <Grid item xs={12} md={6}>
+      <Card elevation={4} sx={{ p: 3, borderRadius: 3, height: "100%" }}>
+        <CardContent>
+          <Typography
+            variant="h5"
+            gutterBottom
+            sx={{ fontWeight: 600, textAlign: "center", color: "primary.main" }}
+          >
+            Reminders ⏰
+          </Typography>
+          {user.reminders.length > 0 ? (
+            <List
+              sx={{
+                maxHeight: "320px",
+                overflowY: "auto",
+                scrollbarWidth: "thin",
+                "&::-webkit-scrollbar": {
+                  width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#ccc",
+                  borderRadius: "4px",
+                },
+              }}
+            >
+              {user.reminders.map((reminder) => (
+                <ListItem key={reminder._id} disableGutters>
+                  <Avatar
+                    src={
+                      platformLogos[reminder.contest.resource] ||
+                      "https://example.com/default-logo.png"
+                    }
+                    sx={{ mr: 2 }}
+                  />
+                  <ListItemText
+                    primary={`${reminder.contest.name}`}
+                    secondary={`Reminder: ${new Date(reminder.reminderTime).toLocaleString()}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          ) : (
+            <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
+              No reminders set.
+            </Typography>
+          )}
+        </CardContent>
+      </Card>
+    </Grid>
+  </Grid>
+</Container>
+
     );
 };
 

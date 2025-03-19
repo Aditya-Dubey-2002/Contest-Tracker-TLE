@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 
 const SignupModal = ({ open, onClose, switchToLogin }) => {
     const { login } = useAuth();
-    const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+    const [formData, setFormData] = useState({ name: "", email: "", contactNo: "", password: "" });
     const [error, setError] = useState("");
 
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -16,7 +16,7 @@ const SignupModal = ({ open, onClose, switchToLogin }) => {
     const handleSignup = async () => {
         setError("");
         try {
-            const response = await fetch(`${apiUrl}/auth/signup`, {
+            const response = await fetch(`${apiUrl}/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
@@ -39,6 +39,7 @@ const SignupModal = ({ open, onClose, switchToLogin }) => {
                 {error && <Alert severity="error">{error}</Alert>}
                 <TextField name="name" label="Full Name" fullWidth margin="normal" onChange={handleChange} />
                 <TextField name="email" label="Email" fullWidth margin="normal" onChange={handleChange} />
+                <TextField name="contactNo" label="Contact Number" fullWidth margin="normal" onChange={handleChange} />
                 <TextField name="password" label="Password" type="password" fullWidth margin="normal" onChange={handleChange} />
                 <Button variant="contained" fullWidth onClick={handleSignup}>Sign Up</Button>
 

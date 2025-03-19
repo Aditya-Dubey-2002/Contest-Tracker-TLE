@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@bull-board/express": "^6.7.10",
+    "@sendgrid/mail": "^8.1.4",
     "axios": "^1.8.3",
     "bcryptjs": "^3.0.2",
     "bull": "^4.16.5",
@@ -23,7 +24,8 @@
     "mongoose": "^8.12.1",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
-    "puppeteer": "^24.4.0"
+    "puppeteer": "^24.4.0",
+    "twilio": "^5.5.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"

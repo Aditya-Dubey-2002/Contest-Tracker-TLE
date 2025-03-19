@@ -16,29 +16,33 @@ const ContestList = ({ contests, type }) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const token = JSON.parse(localStorage.getItem("user"))?.token;
 
-useEffect(() => {
-    const fetchUserData = async () => {
-        try {
-            if (!token) return; // Ensure token exists before making API request
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                if (!token) return; // Ensure token exists before making API request
 
-            const res = await axios.get(`${apiUrl}/user/profile`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+                const res = await axios.get(`${apiUrl}/user/profile`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
 
-            const bookmarkedIds = res.data.bookmarkedContests.map(contest => contest._id);
-            const reminderIds = res.data.reminders.map(reminder => reminder.contest._id);
+                const bookmarkedIds = res.data.bookmarkedContests.map(contest => contest._id);
+                // const reminderIds = res.data.reminders.map(reminder => {reminder.contest._id=reminder.contest.type});
+                const reminderIds = res.data.reminders.map(reminder => ({
+                    id: reminder.contest._id,
+                    type: reminder.type
+                }));
+                console.log(res.data.reminders);
+                // Directly use the fetched data instead of state
+                localStorage.setItem("bookmarkedContests", JSON.stringify(bookmarkedIds));
+                localStorage.setItem("reminderContests", JSON.stringify(reminderIds));
 
-            // Directly use the fetched data instead of state
-            localStorage.setItem("bookmarkedContests", JSON.stringify(bookmarkedIds));
-            localStorage.setItem("reminderContests", JSON.stringify(reminderIds));
+            } catch (err) {
+                console.error("Failed to fetch user data:", err);
+            }
+        };
 
-        } catch (err) {
-            console.error("Failed to fetch user data:", err);
-        }
-    };
-
-    fetchUserData();
-}, [token]); // Runs whenever token changes
+        fetchUserData();
+    }, [token]); // Runs whenever token changes
 
 
     const handleFilterChange = (event) => {
@@ -53,11 +57,20 @@ useEffect(() => {
     };
 
     return (
-        <Container sx={{ mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
+        <Container
+            sx={{
+                mt: 4,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+            }}
+        >
+            <Typography variant="h5" gutterBottom sx={{ 
+                color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.primary' 
+            }}>
                 Select Platforms:
             </Typography>
-            <FormGroup row>
+            <FormGroup row sx={{ mb: 2, justifyContent: "center" }}>
                 {Object.entries(platformMap).map(([name, key]) => (
                     <FormControlLabel
                         key={key}
@@ -66,44 +79,77 @@ useEffect(() => {
                                 checked={selectedPlatforms.includes(key)}
                                 onChange={handleFilterChange}
                                 name={key}
+                                sx={{
+                                    color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.primary',
+                                    '&.Mui-checked': {
+                                        color: 'primary.main',
+                                    },
+                                }}
                             />
                         }
                         label={name.replace(".com", "").toUpperCase()}
+                        sx={{
+                            color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.primary',
+                            '& .MuiFormControlLabel-label': {
+                                color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.primary',
+                            },
+                        }}
                     />
                 ))}
             </FormGroup>
 
-            <Grid2 container spacing={3} sx={{ mt: 3 }}>
-                <Grid2 item xs={12}>
+            <Grid2 container justifyContent="center">
+                <Grid2 item>
                     <Box
                         sx={{
-                            p: 2,
-                            border: "1px solid #ddd",
-                            borderRadius: 2,
-                            backgroundColor: "background.paper",
-                            boxShadow: 1,
+                            p: 3,
+                            border: "1px solid",
+                            borderColor: "divider",
+                            borderRadius: 3,
+                            backgroundColor: (theme) => theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
+                            boxShadow: (theme) => theme.palette.mode === 'dark' 
+                                ? "0 4px 12px rgba(0, 0, 0, 0.3)"
+                                : "0 4px 12px rgba(0, 0, 0, 0.06)",
+                            maxHeight: "600px",
+                            overflowY: "auto",
+                            width: "340px",
+                            mx: "auto",
+                            transition: "all 0.3s ease",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            "&:hover": {
+                                boxShadow: (theme) => theme.palette.mode === 'dark'
+                                    ? "0 6px 16px rgba(0, 0, 0, 0.4)"
+                                    : "0 6px 16px rgba(0, 0, 0, 0.1)",
+                            },
                         }}
                     >
-                        <Typography variant="h5" gutterBottom>
+                        <Typography
+                            variant="h6"
+                            gutterBottom
+                            sx={{ 
+                                mb: 2, 
+                                fontWeight: 600, 
+                                textAlign: "center", 
+                                color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.primary'
+                            }}
+                        >
                             {type === "upcoming" ? "Upcoming Contests" : "Past Contests"}
                         </Typography>
                         {filterContests(contests).length > 0 ? (
-                            filterContests(contests).map((contest) => {
-                                {/* const isBookmarked = bookmarkedContestIds.includes(contest._id?.toString());
-                                const hasReminder = reminderContestIds.includes(contest._id?.toString()); */}
-
-                                return (
-                                    <ContestCard
-                                        key={contest._id?.toString()}  // ✅ Fix: Ensuring unique key
-                                        contest={contest}
-                                        type={type}
-                                    // userBookmarked={isBookmarked}
-                                    // userReminders={hasReminder}
-                                    />
-                                );
-                            })
+                            filterContests(contests).map((contest) => (
+                                <ContestCard
+                                    key={contest._id?.toString()}
+                                    contest={contest}
+                                    type={type}
+                                />
+                            ))
                         ) : (
-                            <Typography sx={{ textAlign: "center", color: "text.secondary" }}>
+                            <Typography sx={{ 
+                                textAlign: "center", 
+                                color: theme => theme.palette.mode === 'dark' ? '#000000' : 'text.secondary' 
+                            }}>
                                 No {type} contests.
                             </Typography>
                         )}

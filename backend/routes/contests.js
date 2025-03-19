@@ -8,10 +8,10 @@ const { reminderQueue } = require("../config/bullQueue");
 const cron = require("node-cron");
 
 // Run updateDailyContests every day at midnight
+
 cron.schedule("0 0 * * *", async () => {
     await updateDailyContests();
 });
-
 
 
 const router = express.Router();
@@ -44,16 +44,22 @@ const fetchClistContests = async (startDate, endDate) => {
 };
 
 const storeContests = async (contests) => {
-    const currentDate = new Date();
+    const currentDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }));
+
+    // Function to convert UTC date to IST
+    const convertToIST = (dateString) => {
+        const utcDate = new Date(dateString);
+        return new Date(utcDate.getTime() + (5.5 * 60 * 60 * 1000)); // Add 5 hours 30 minutes
+    };
 
     // Transform contests to match schema and determine type
     let formattedContests = contests.map(contest => ({
         name: contest.event,
-        resource: contest.resource.name, // ✅ Extract name from resource object
-        start: new Date(contest.start),
-        end: new Date(contest.end),
+        resource: contest.resource.name,
+        start: convertToIST(contest.start),  // Convert start time to IST
+        end: convertToIST(contest.end),      // Convert end time to IST
         href: contest.href,
-        type: new Date(contest.start) > currentDate ? "upcoming" : "past", // ✅ Assign type dynamically
+        type: convertToIST(contest.start) > currentDate ? "upcoming" : "past", // Assign type dynamically
         ytlink: contest.ytlink || null
     }));
 
@@ -69,15 +75,15 @@ const storeContests = async (contests) => {
 
     for (const contest of formattedContests) {
         await Contest.findOneAndUpdate(
-            { name: contest.name, resource: contest.resource, start: contest.start }, // ✅ Unique condition
+            { name: contest.name, resource: contest.resource, start: contest.start },
             contest,
-            { upsert: true, new: true } // ✅ Insert if not found, update otherwise
+            { upsert: true, new: true }
         );
     }
 
     // ✅ Move past contests from "upcoming" to "past"
     await Contest.updateMany(
-        { type: "upcoming", start: { $lt: currentDate } }, // Contests that started already
+        { type: "upcoming", start: { $lt: currentDate } }, 
         { $set: { type: "past" } }
     );
 
@@ -87,7 +93,7 @@ const storeContests = async (contests) => {
 
     await Contest.deleteMany({ end: { $lt: oneWeekAgo } });
 
-    console.log("Contests updated successfully!");
+    console.log("Contests updated successfully in IST timezone!");
 };
 
 
@@ -101,7 +107,7 @@ router.get("/", async (req, res) => {
         const upcoming = [];
         const past = [];
         const currentDate = new Date();
-
+        // await updateDailyContests();
         contests.forEach((contest) => {
             if (new Date(contest.start) > currentDate) {
                 upcoming.push(contest);
@@ -243,6 +249,7 @@ router.get("/reminders", authMiddleware, async (req, res) => {
                     ytlink: contest.ytlink || null,
                 },
                 reminderTime: reminder.reminderTime,
+                type: reminder.type, // Added type field
                 timeBeforeReminder: timeBeforeReminder / (1000 * 60), // Convert to minutes
             };
         }).filter(Boolean); // Remove null values if any contest data is missing
@@ -255,9 +262,10 @@ router.get("/reminders", authMiddleware, async (req, res) => {
 
 
 
+
 router.post("/reminder/:contestId", authMiddleware, async (req, res) => {
     try {
-        const { reminderTime } = req.body;
+        const { reminderTime, type } = req.body; // Extract type from request body
         const userId = req.user.userId;
         const contestId = req.params.contestId;
 
@@ -267,25 +275,36 @@ router.post("/reminder/:contestId", authMiddleware, async (req, res) => {
             return res.status(404).json({ message: "Contest not found" });
         }
 
-        // Check if a reminder with the same userId, contestId, and reminderTime already exists
-        const existingReminder = await Reminder.findOne({ userId, contestId, reminderTime });
+        // Validate type
+        if (!["email", "sms"].includes(type)) {
+            return res.status(400).json({ message: "Invalid reminder type. Allowed values: email, sms" });
+        }
+
+        // Check if a reminder with the same userId, contestId, reminderTime, and type already exists
+        const existingReminder = await Reminder.findOne({ userId, contestId, reminderTime, type });
         if (existingReminder) {
-            return res.status(409).json({ message: "Reminder already set for this contest at the same time" });
+            return res.status(409).json({ message: "Reminder already set for this contest at the same time with the same type" });
         }
 
         // Create and save the new reminder
-        const reminder = new Reminder({ userId, contestId, reminderTime });
+        const reminder = new Reminder({ userId, contestId, reminderTime, type });
         await reminder.save();
 
         const delay = new Date(reminderTime) - new Date();
-        await reminderQueue.add({ userId, contestId }, { delay });
+        await reminderQueue.add({ 
+            userId, 
+            contestId, 
+            type,
+            reminderId: reminder._id 
+        }, { delay });
 
-        res.json({ message: "Reminder set successfully" });
+        res.json({ message: "Reminder set successfully", reminder });
     } catch (error) {
         console.error("Error setting reminder:", error);
         res.status(500).json({ message: "Server error", error });
     }
 });
+
 
 
 router.delete("/reminder/:contestId", authMiddleware, async (req, res) => {
@@ -317,3 +336,4 @@ router.delete("/reminder/:contestId", authMiddleware, async (req, res) => {
 
 
 module.exports = router;
+
