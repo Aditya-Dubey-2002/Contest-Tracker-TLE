@@ -170,19 +170,15 @@ graph LR
 ## Screenshots
 
 ### Home Page
-[Add screenshot of the home page showing upcoming and past contests]
-
-### Contest Card
-[Add screenshot of a contest card showing time remaining and bookmark option]
+![image](https://github.com/user-attachments/assets/d9569bf3-370b-4d9d-96aa-81cb4cc71b26)
 
 ### Reminder Settings
-[Add screenshot of the reminder settings modal]
+![image](https://github.com/user-attachments/assets/bc9fbd39-0b77-4235-a14d-f14086e633ef)
 
-### YouTube Link Management
-[Add screenshot of the admin interface for managing YouTube links]
+### Mobile View (Dark Mode)
+![image](https://github.com/user-attachments/assets/2b1214bb-f872-4fae-b597-b03c00452ae0)
 
-### Mobile View
-[Add screenshot of the mobile-responsive design]
+
 
 ## Getting Started
 
