@@ -15,6 +15,7 @@ A full-stack web application that helps competitive programmers track coding con
   - [User Model](#user-model)
   - [Reminder Model](#reminder-model)
 - [Screenshots](#screenshots)
+- [Demo Video](#demo-video)
 - [Tech Stack](#tech-stack)
   - [Frontend](#frontend)
   - [Backend](#backend)
@@ -157,6 +158,11 @@ graph LR
 
 ### Mobile View
 [Add screenshot of the mobile-responsive design]
+
+## Demo Video
+
+Watch a complete demo of the Contest Tracker application:
+[Demo Video](https://drive.google.com/file/d/1uBu8SGJzh6wjZJh51O1NboAGTWnUZqjz/view?usp=drive_link)
 
 ## Tech Stack
 
