@@ -2,6 +2,11 @@
 
 A full-stack web application that helps competitive programmers track coding contests from Codeforces, CodeChef, and LeetCode. Built with the MERN stack (MongoDB, Express.js, React.js, Node.js).
 
+## Demo Video
+
+Watch a complete demo of the Contest Tracker application:
+[Demo Video](https://drive.google.com/file/d/1uBu8SGJzh6wjZJh51O1NboAGTWnUZqjz/view?usp=drive_link)
+
 ## Table of Contents
 - [Features](#features)
   - [Core Features](#core-features)
@@ -158,11 +163,6 @@ graph LR
 
 ### Mobile View
 [Add screenshot of the mobile-responsive design]
-
-## Demo Video
-
-Watch a complete demo of the Contest Tracker application:
-[Demo Video](https://drive.google.com/file/d/1uBu8SGJzh6wjZJh51O1NboAGTWnUZqjz/view?usp=drive_link)
 
 ## Tech Stack
 
