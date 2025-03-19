@@ -297,6 +297,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_twitter) - email@example.com
+Aditya Dubey - [LinkedIn](linkedin.com/in/aditya-dubey-7263b7200/) - dubey02.adity@gmail.com
 
 Project Link: [https://github.com/yourusername/contest-tracker](https://github.com/yourusername/contest-tracker) 
