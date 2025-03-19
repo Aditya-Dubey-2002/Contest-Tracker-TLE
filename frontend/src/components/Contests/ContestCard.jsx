@@ -265,17 +265,37 @@ const ContestCard = ({ contest, type }) => {
                             </Stack>
                         )}
 
-                        <IconButton
-                            color="secondary"
-                            onClick={(e) => handleProtectedAction(e, toggleBookmark)}
-                            sx={{
-                                bgcolor: "action.hover",
-                                "&:hover": { bgcolor: "action.selected" },
-                                color: "text.primary",
-                            }}
-                        >
-                            {bookmarked ? <BookmarkAddedIcon /> : <BookmarkIcon />}
-                        </IconButton>
+                        <Stack direction="row" spacing={1} alignItems="center">
+                            {type === "past" && (
+                                <Button
+                                    variant="outlined"
+                                    size="small"
+                                    color="primary"
+                                    href={contest.ytlink || "#"}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    disabled={!contest.ytlink}
+                                    sx={{ 
+                                        textTransform: "none",
+                                        fontWeight: 500,
+                                        minWidth: "120px"
+                                    }}
+                                >
+                                    {contest.ytlink ? "Watch Solution" : "Coming Soon"}
+                                </Button>
+                            )}
+                            <IconButton
+                                color="secondary"
+                                onClick={(e) => handleProtectedAction(e, toggleBookmark)}
+                                sx={{
+                                    bgcolor: "action.hover",
+                                    "&:hover": { bgcolor: "action.selected" },
+                                    color: "text.primary",
+                                }}
+                            >
+                                {bookmarked ? <BookmarkAddedIcon /> : <BookmarkIcon />}
+                            </IconButton>
+                        </Stack>
                     </Stack>
                 </CardContent>
             </Card>

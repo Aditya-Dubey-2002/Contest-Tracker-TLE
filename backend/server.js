@@ -29,6 +29,23 @@ connectDB().then(async () => {
     console.log("⏳ Running startup job: Updating contest videos...");
     await updateContestsWithVideos();
     console.log("✅ Contest videos updated successfully");
+
+    // Schedule cron jobs
+    console.log("⏳ Setting up scheduled tasks...");
+    
+    // Run updateDailyContests every 12 hours
+    cron.schedule("0 */12 * * *", async () => {
+        console.log("🔄 Running scheduled contest update...");
+        await updateDailyContests();
+    });
+
+    // Run updateContestsWithVideos every 12 hours
+    cron.schedule("0 */12 * * *", async () => {
+        console.log("🔄 Running scheduled video update...");
+        await updateContestsWithVideos();
+    });
+
+    console.log("✅ Scheduled tasks set up successfully");
     
 }).catch((err) => {
     console.error("❌ Database connection failed:", err);

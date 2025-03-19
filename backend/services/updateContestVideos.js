@@ -17,12 +17,7 @@ const fetchVideos = async (playlistId) => {
         const response = await axios.get( `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=5&playlistId=${playlistId}&key=${process.env.YT_API_KEY}`, {
             params: { part: "snippet", maxResults: 5, key: API_KEY }
         });
-        // const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=5&playlistId=${playlistId}&key=${YT_API_KEY}`;
-
-        // axios.get(url)
-        //     .then(response => console.log("✅ YouTube Data:", response.data))
-        //     .catch(error => console.error("🚨 YouTube API Error:", error.response.data));
-
+        
         if (!response.data.items) {
             console.error("🚨 API response is missing video items!");
             return [];

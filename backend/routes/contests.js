@@ -5,14 +5,6 @@ const User = require("../models/User");
 const Reminder = require("../models/reminder");
 const authMiddleware = require("../middleware/auth");
 const { reminderQueue } = require("../config/bullQueue");
-const cron = require("node-cron");
-
-// Run updateDailyContests every day at midnight
-
-cron.schedule("0 0 * * *", async () => {
-    await updateDailyContests();
-});
-
 
 const router = express.Router();
 const ALLOWED_PLATFORMS = ["codeforces.com", "codechef.com", "leetcode.com"]; // Filter only these platforms
