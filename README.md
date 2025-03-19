@@ -11,6 +11,10 @@ Watch a complete demo of the Contest Tracker application:
 - [Features](#features)
   - [Core Features](#core-features)
   - [Technical Features](#technical-features)
+- [Tech Stack](#tech-stack)
+  - [Frontend](#frontend)
+  - [Backend](#backend)
+  - [APIs Used](#apis-used)
 - [Data Flows](#data-flows)
   - [Contest Loading and Rendering](#1-contest-loading-and-rendering)
   - [Reminder System](#2-reminder-system)
@@ -20,11 +24,6 @@ Watch a complete demo of the Contest Tracker application:
   - [User Model](#user-model)
   - [Reminder Model](#reminder-model)
 - [Screenshots](#screenshots)
-- [Demo Video](#demo-video)
-- [Tech Stack](#tech-stack)
-  - [Frontend](#frontend)
-  - [Backend](#backend)
-  - [APIs Used](#apis-used)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
@@ -61,6 +60,27 @@ Watch a complete demo of the Contest Tracker application:
 - Email and SMS reminders for contests
 - RESTful API architecture
 
+## Tech Stack
+
+### Frontend
+- React.js
+- Material-UI
+- Context API for state management
+- Axios for API calls
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Bull Queue for job processing
+- Node-cron for scheduled tasks
+- JWT for authentication
+
+### APIs Used
+- Clist.by API for contest data
+- YouTube Data API for solution videos
+- SendGrid for email notifications
+- Twilio for SMS notifications
 ## Data Flows
 
 ### 1. Contest Loading and Rendering
@@ -163,28 +183,6 @@ graph LR
 
 ### Mobile View
 [Add screenshot of the mobile-responsive design]
-
-## Tech Stack
-
-### Frontend
-- React.js
-- Material-UI
-- Context API for state management
-- Axios for API calls
-
-### Backend
-- Node.js
-- Express.js
-- MongoDB
-- Bull Queue for job processing
-- Node-cron for scheduled tasks
-- JWT for authentication
-
-### APIs Used
-- Clist.by API for contest data
-- YouTube Data API for solution videos
-- SendGrid for email notifications
-- Twilio for SMS notifications
 
 ## Getting Started
 
